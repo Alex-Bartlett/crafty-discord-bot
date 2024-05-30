@@ -11,10 +11,13 @@ const headers = {
 }
 const agent = new https.Agent({ rejectUnauthorized: false })
 
-async function Fetch(url, options, body = {}) {
+async function Fetch(url, options, body = null) {
 	try {
+		if (body !== null) {
+			options.body = body;
+		}
 		const { default: fetch } = await import('node-fetch');
-		const response = fetch(url, options, body);
+		const response = fetch(url, options);
 		const responseBody = (await response).json();
 		return responseBody;
 	}
@@ -101,33 +104,41 @@ async function BackupServer() {
 }
 
 async function BanPlayer(name) {
+	const cmd = `ban ${name}`;
+	const success = RunCommand(cmd);
+	if (success) {
+		RunCommand(`say ${name} was banned from the server.`);
+	}
+	return success;
+}
+
+module.exports = {
+	StartServer,
+	StopServer,
+	RestartServer,
+	BackupServer,
+	BanPlayer
+}
+
+async function RunCommand(cmdString) {
 	const url = `${baseurl}/servers/${server}/stdin`
 	const options = {
 		method: 'POST',
 		headers: headers,
 		agent: agent
 	}
-	// Override json content type.
-	options.headers['Content-Type'] = 'text/plain';
 
-	const body = `say ${name}`;
+	const body = cmdString;
 
 
 	const response = await Fetch(url, options, body);
 
 	if (response != null && response.status === 'ok') {
+		console.log(cmdString);
 		return true;
 	}
 	else {
+		console.log(cmdString, response);
 		return false;
 	}
-}
-
-StopServer().then(res => console.log(res));
-
-module.exports = {
-	StartServer,
-	StopServer,
-	RestartServer,
-	BackupServer
 }

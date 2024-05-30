@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { BackupServer } = require('../crafty-requests.js');
+const { BanPlayer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,11 +8,11 @@ module.exports = {
 		.addStringOption(option => option.setName('player').setRequired(true).setDescription("The username of the player to ban.")),
 	async execute(interaction) {
 		// Arguments
-		const player = interaction.options.GetString('player') ?? "";
+		const player = interaction.options.getString('player') ?? "";
 		// Code
 		let content;
 
-		const result = await BackupServer();
+		const result = await BanPlayer(player);
 
 		if (result == true && player !== "") {
 			content = `✅ Banned ${player}`;
