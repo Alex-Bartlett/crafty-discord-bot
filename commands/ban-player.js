@@ -4,7 +4,7 @@ const { BackupServer } = require('../crafty-requests.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('banplayer')
-		.setDescription('Takes a backup of the Minecraft Server.')
+		.setDescription('Bans a player from the server. Please do not abuse.')
 		.addStringOption(option => option.setName('player').setRequired(true).setDescription("The username of the player to ban.")),
 	async execute(interaction) {
 		// Arguments
