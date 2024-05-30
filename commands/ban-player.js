@@ -3,7 +3,7 @@ const { BanPlayer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('banplayer')
+		.setName('mc-ban')
 		.setDescription('Bans a player from the server. Please do not abuse.')
 		.addStringOption(option => option.setName('player').setRequired(true).setDescription("The username of the player to ban.")),
 	async execute(interaction) {

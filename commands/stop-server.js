@@ -3,14 +3,14 @@ const { StopServer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('stopserver')
+		.setName('mc-stop')
 		.setDescription('Stops the Minecraft Server.'),
 	async execute(interaction) {
 		// Arguments
-		
+
 		// Code
 		let content;
-		
+
 		const result = await StopServer();
 
 		if (result == true) {

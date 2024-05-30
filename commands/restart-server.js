@@ -3,14 +3,14 @@ const { RestartServer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('restartserver')
+		.setName('mc-restart')
 		.setDescription('Restarts the Minecraft Server.'),
 	async execute(interaction) {
 		// Arguments
-		
+
 		// Code
 		let content;
-		
+
 		const result = await RestartServer();
 
 		if (result == true) {

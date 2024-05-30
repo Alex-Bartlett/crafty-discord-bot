@@ -3,14 +3,14 @@ const { BackupServer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('backupserver')
+		.setName('mc-backup')
 		.setDescription('Takes a backup of the Minecraft Server.'),
 	async execute(interaction) {
 		// Arguments
-		
+
 		// Code
 		let content;
-		
+
 		const result = await BackupServer();
 
 		if (result == true) {

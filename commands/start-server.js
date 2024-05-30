@@ -3,14 +3,14 @@ const { StartServer } = require('../crafty-requests.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('startserver')
+		.setName('mc-start')
 		.setDescription('Starts the Minecraft Server.'),
 	async execute(interaction) {
 		// Arguments
-		
+
 		// Code
 		let content;
-		
+
 		const result = await StartServer();
 
 		if (result == true) {
