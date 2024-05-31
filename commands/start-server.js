@@ -9,17 +9,17 @@ module.exports = {
 		// Arguments
 
 		// Code
-		let content = "@silent ";
+		let content;
 
 		const result = await StartServer();
 
 		if (result == true) {
-			content += "✅ Starting server";
+			content = "✅ Starting server";
 		}
 		else {
-			content += "❌ An error occured!"
+			content = "❌ An error occured!"
 		}
 
-		await interaction.reply({ content: content, ephemeral: false });
+		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
 	},
 };

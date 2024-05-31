@@ -10,17 +10,17 @@ module.exports = {
 		// Arguments
 		const player = interaction.options.getString('player') ?? "";
 		// Code
-		let content = "@silent ";
+		let content;
 
 		const result = await BanPlayer(player);
 
 		if (result == true && player !== "") {
-			content += `✅ Banned ${player}`;
+			content = `✅ Banned ${player}`;
 		}
 		else {
-			content += "❌ An error occured!"
+			content = "❌ An error occured!"
 		}
 
-		await interaction.reply({ content: content, ephemeral: false });
+		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
 	},
 };
