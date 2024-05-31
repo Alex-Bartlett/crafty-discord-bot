@@ -119,12 +119,12 @@ async function GetPlayers() {
 		headers: headers,
 		agent: agent,
 	}
-	const response = await Fetch(url, options);
-	if (response.status === "ok" && response.data !== undefined) {
-		return eval(response.data.players);
+	const res = await Fetch(url, options);
+	if (res.status === "ok" && res.data !== undefined) {
+		return eval(res.data.players);
 	}
 	else {
-		console.log(response);
+		console.log(res);
 		return false;
 	}
 }
