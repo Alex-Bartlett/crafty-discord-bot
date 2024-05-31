@@ -9,15 +9,15 @@ module.exports = {
 		// Arguments
 
 		// Code
-		let content;
+		let content = "@silent ";
 
 		const result = await BackupServer();
 
 		if (result == true) {
-			content = "✅ Starting backup";
+			content += "✅ Starting backup";
 		}
 		else {
-			content = "❌ An error occured!"
+			content += "❌ An error occured!"
 		}
 
 		await interaction.reply({ content: content, ephemeral: false });

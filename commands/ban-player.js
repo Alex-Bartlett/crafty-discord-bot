@@ -10,15 +10,15 @@ module.exports = {
 		// Arguments
 		const player = interaction.options.getString('player') ?? "";
 		// Code
-		let content;
+		let content = "@silent ";
 
 		const result = await BanPlayer(player);
 
 		if (result == true && player !== "") {
-			content = `✅ Banned ${player}`;
+			content += `✅ Banned ${player}`;
 		}
 		else {
-			content = "❌ An error occured!"
+			content += "❌ An error occured!"
 		}
 
 		await interaction.reply({ content: content, ephemeral: false });

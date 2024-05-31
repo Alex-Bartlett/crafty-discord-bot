@@ -9,15 +9,15 @@ module.exports = {
 		// Arguments
 
 		// Code
-		let content;
+		let content = "@silent ";
 
 		const result = await RestartServer();
 
 		if (result == true) {
-			content = "✅ Restarting server";
+			content += "✅ Restarting server";
 		}
 		else {
-			content = "❌ An error occured!"
+			content += "❌ An error occured!"
 		}
 
 		await interaction.reply({ content: content, ephemeral: false });
