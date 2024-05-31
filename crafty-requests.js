@@ -112,12 +112,30 @@ async function BanPlayer(name) {
 	return success;
 }
 
+async function GetPlayers() {
+	const url = `${baseurl}/servers/${server}/stats`
+	const options = {
+		method: "GET",
+		headers: headers,
+		agent: agent,
+	}
+	const response = await Fetch(url, options);
+	if (response.status === "ok" && response.data !== undefined) {
+		return eval(response.data.players);
+	}
+	else {
+		console.log(response);
+		return false;
+	}
+}
+
 module.exports = {
 	StartServer,
 	StopServer,
 	RestartServer,
 	BackupServer,
-	BanPlayer
+	BanPlayer,
+	GetPlayers
 }
 
 async function RunCommand(cmdString) {
