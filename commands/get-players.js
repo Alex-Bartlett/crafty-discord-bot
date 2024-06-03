@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { BanPlayer, GetPlayers } = require('../crafty-requests.js');
-const res = require('express/lib/response.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
