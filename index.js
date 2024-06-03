@@ -1,5 +1,6 @@
 const fs = require('node:fs')
 const path = require('node:path')
+const logger = require('./logger.js');
 // Require the necessary discord.js classes
 const {
 	Client,
@@ -56,15 +57,25 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		return
 	}
 
+	let didError = false;
+
 	try {
 		await command.execute(interaction)
 	} catch (error) {
+		didError = true;
 		console.error(error)
 		await interaction.reply({
 			content: 'There was an error while executing this command.',
 			ephemeral: true,
 		})
 	}
+	finally {
+		// Log commands (but don't log the owner checking the logs!)
+		if (!(interaction.commandName == 'printlog' && interaction.user.id == discord_secrets.ownerId)) {
+			logger.LogCommand(interaction.commandName, interaction.user.username, didError ? "but it failed!" : "");
+		}
+	}
+
 });
 
 // Login to Discord with your client's token
