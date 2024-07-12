@@ -9,7 +9,9 @@ module.exports = {
 		// Arguments
 
 		// Code
-		let content;
+		let content = "🕓 Contacting server...";
+		// Reply first (fetch can take > 3 sec)
+		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
 
 		const result = await StopServer();
 
@@ -20,6 +22,6 @@ module.exports = {
 			content = "❌ An error occured!"
 		}
 
-		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
+		await interaction.editReply(content);
 	},
 };

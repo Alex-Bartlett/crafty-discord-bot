@@ -58,21 +58,31 @@ client.on(Events.InteractionCreate, async (interaction) => {
 	}
 
 	let didError = false;
+	let errMsg = "";
 
 	try {
 		await command.execute(interaction)
 	} catch (error) {
 		didError = true;
+		errMsg = error;
 		console.error(error)
-		await interaction.reply({
-			content: 'There was an error while executing this command.',
-			ephemeral: true,
-		})
+		try {
+			await interaction.reply({
+				content: 'There was an error while executing this command.',
+				ephemeral: true,
+			})
+		}
+		catch (error) {
+			console.error("Could not send error message because the interaction timed out.");
+		}
 	}
 	finally {
 		// Log commands (but don't log the owner checking the logs!)
 		if (!(interaction.commandName == 'printlog' && interaction.user.id == discord_secrets.ownerId)) {
 			logger.LogCommand(interaction.commandName, interaction.user.username, didError ? "but it failed!" : "");
+			if (didError) {
+				logger.LogError(errMsg);
+			}
 		}
 	}
 

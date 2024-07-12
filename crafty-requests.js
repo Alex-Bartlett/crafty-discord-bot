@@ -22,7 +22,7 @@ async function Fetch(url, options, body = null) {
 		return responseBody;
 	}
 	catch (error) {
-		console.error('Error requring node-fetch.', error);
+		console.error('A fetch error occured.', error);
 		return null;
 	}
 }
@@ -149,7 +149,6 @@ async function GetPlayers() {
 			return eval(response.data.players);
 		}
 		else {
-			console.log(response);
 			return false;
 		}
 	}
