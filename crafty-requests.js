@@ -28,103 +28,133 @@ async function Fetch(url, options, body = null) {
 }
 
 async function StartServer() {
-	const url = `${baseurl}/servers/${server}/action/start_server`;
-	const options = {
-		method: 'POST',
-		headers: headers,
-		agent: agent
-	}
+	try {
+		const url = `${baseurl}/servers/${server}/action/start_server`;
+		const options = {
+			method: 'POST',
+			headers: headers,
+			agent: agent
+		}
 
-	const response = await Fetch(url, options);
+		const response = await Fetch(url, options);
 
-	if (response != null && response.status === 'ok') {
-		return true;
+		if (response != null && response.status === 'ok') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	else {
-		return false;
+	catch (error) {
+		console.error('Error starting server.', error);
 	}
-
 }
 
 async function StopServer() {
-	const url = `${baseurl}/servers/${server}/action/stop_server`;
-	const options = {
-		method: 'POST',
-		headers: headers,
-		agent: agent
-	}
+	try {
+		const url = `${baseurl}/servers/${server}/action/stop_server`;
+		const options = {
+			method: 'POST',
+			headers: headers,
+			agent: agent
+		}
 
-	const response = await Fetch(url, options);
+		const response = await Fetch(url, options);
 
-	if (response != null && response.status === 'ok') {
-		return true;
+		if (response != null && response.status === 'ok') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	else {
-		return false;
+	catch (error) {
+		console.error('Error stopping server.', error);
 	}
 
 }
 
 async function RestartServer() {
-	const url = `${baseurl}/servers/${server}/action/restart_server`;
-	const options = {
-		method: 'POST',
-		headers: headers,
-		agent: agent
-	}
+	try {
+		const url = `${baseurl}/servers/${server}/action/restart_server`;
+		const options = {
+			method: 'POST',
+			headers: headers,
+			agent: agent
+		}
 
-	const response = await Fetch(url, options);
+		const response = await Fetch(url, options);
 
-	if (response != null && response.status === 'ok') {
-		return true;
+		if (response != null && response.status === 'ok') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	else {
-		return false;
+	catch (error) {
+		console.error('Error restarting server.', error);
 	}
 
 }
 
 async function BackupServer() {
-	const url = `${baseurl}/servers/${server}/action/backup_server`;
-	const options = {
-		method: 'POST',
-		headers: headers,
-		agent: agent
-	}
+	try {
+		const url = `${baseurl}/servers/${server}/action/backup_server`;
+		const options = {
+			method: 'POST',
+			headers: headers,
+			agent: agent
+		}
 
-	const response = await Fetch(url, options);
+		const response = await Fetch(url, options);
 
-	if (response != null && response.status === 'ok') {
-		return true;
+		if (response != null && response.status === 'ok') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	else {
-		return false;
+	catch (error) {
+		console.error('Error backing up server.', error);
 	}
 
 }
 
 async function BanPlayer(name) {
-	const cmd = `ban ${name}`;
-	const success = RunCommand(cmd);
-	if (success) {
-		RunCommand(`say ${name} was banned from the server.`);
+	try {
+		const cmd = `ban ${name}`;
+		const success = RunCommand(cmd);
+		if (success) {
+			RunCommand(`say ${name} was banned from the server.`);
+		}
+		return success;
 	}
-	return success;
+	catch (error) {
+		console.error('Error banning player.', error);
+	}
 }
 
 async function GetPlayers() {
-	const url = `${baseurl}/servers/${server}/stats`
-	const options = {
-		method: "GET",
-		headers: headers,
-		agent: agent,
+	try {
+		const url = `${baseurl}/servers/${server}/stats`
+		const options = {
+			method: "GET",
+			headers: headers,
+			agent: agent,
+		}
+		const response = await Fetch(url, options);
+		if (response.status === "ok" && response.data.players !== "False") {
+			return eval(response.data.players);
+		}
+		else {
+			console.log(response);
+			return false;
+		}
 	}
-	const response = await Fetch(url, options);
-	if (response.status === "ok" && response.data.players !== "False") {
-		return eval(response.data.players);
-	}
-	else {
-		return false;
+	catch (error) {
+		console.error('Error getting players.', error);
 	}
 }
 
@@ -138,24 +168,29 @@ module.exports = {
 }
 
 async function RunCommand(cmdString) {
-	const url = `${baseurl}/servers/${server}/stdin`
-	const options = {
-		method: 'POST',
-		headers: headers,
-		agent: agent
+	try {
+		const url = `${baseurl}/servers/${server}/stdin`
+		const options = {
+			method: 'POST',
+			headers: headers,
+			agent: agent
+		}
+
+		const body = cmdString;
+
+
+		const response = await Fetch(url, options, body);
+
+		if (response != null && response.status === 'ok') {
+			console.log(cmdString);
+			return true;
+		}
+		else {
+			console.log(cmdString, response);
+			return false;
+		}
 	}
-
-	const body = cmdString;
-
-
-	const response = await Fetch(url, options, body);
-
-	if (response != null && response.status === 'ok') {
-		console.log(cmdString);
-		return true;
-	}
-	else {
-		console.log(cmdString, response);
-		return false;
+	catch (error) {
+		console.error(`Error running command ${cmdString}.`, error);
 	}
 }

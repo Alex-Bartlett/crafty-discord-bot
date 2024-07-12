@@ -17,6 +17,10 @@ async function ReadLog() {
 	return contents;
 }
 
+async function LogError(error) {
+	WriteToLog(`Error: ${error}`);
+}
+
 async function WriteToLog(message) {
 	message += '\n';
 	const logFile = await GetCurrentLog();
@@ -68,4 +72,4 @@ function GetCurrentDateString() {
 	return new Date().toLocaleDateString().replaceAll('/', '-');
 }
 
-module.exports = { LogCommand, ReadLog }
+module.exports = { LogCommand, ReadLog, LogError }

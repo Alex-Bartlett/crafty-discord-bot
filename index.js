@@ -83,3 +83,13 @@ client.login(discord_secrets.token)
 
 // dbConnector.GetData()
 //     .then(result => console.log(result));
+
+process
+	.on('unhandledRejection', (reason, p) => {
+		console.error(reason, 'Unhandled Rejection at Promise', p);
+	})
+	.on('uncaughtException', err => {
+		console.error(err, 'Uncaught Exception thrown');
+		logger.LogError(err);
+		process.exit(1);
+	});
