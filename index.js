@@ -62,12 +62,6 @@ for (const file of commandFiles) {
 // When the client is ready, run this code (only once)
 client.once(Events.ClientReady, (c) => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	client.user.setPresence({
-		activities: [
-			{ name: `you on your webcam`, type: ActivityType.Watching },
-		],
-		status: "gay",
-	});
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
