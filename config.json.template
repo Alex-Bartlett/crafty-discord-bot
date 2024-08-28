@@ -1,9 +1,8 @@
 {
 	"discord_secrets": {
 		"token": "discordBotToken",
-		"clientId": "discordBotClientId",
+		"clientId": "discordBotApplicationId",
 		"guildId": "serverId",
-		"testGuildId": "testServerId (optional, leave blank if not in use)",
 		"ownerId": "serverOwnerUserId"
 	},
 	"crafty": {
@@ -12,10 +11,6 @@
 			"token": "crafty api token"
 		},
 		"servers": [
-			{
-				"name": "server name (",
-				"id": "server id"
-			},
 			{
 				"name": "server name",
 				"id": "server id"

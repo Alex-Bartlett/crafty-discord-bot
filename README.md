@@ -1,50 +1,108 @@
-# discord-data-bot
+# Crafty Discord Bot
 
-You will need to create a config.json in the root folder with the following format:
+This discord bot lets you manage your minecraft servers through discord commands via the Crafty API. It is recommended for use on small friendly servers.
 
+The bot supports managing multiple servers on Crafty.
+
+## Commands
+All commands end with the server name prefix. For this example, the name _Vanilla_ is used. If you have multiple servers, there will be commands for each.
+- `/mc-players-vanilla` - Responds with the online player list.
+- `/mc-start-vanilla` - Starts the server.
+- `/mc-stop-vanilla` - Stops the server.
+- `/mc-restart-vanilla` - Restarts the server.
+- `/mc-backup-vanilla` - Triggers a backup for the server.
+- `/mc-ban-vanilla` - Bans a player. I added this to give players a means to ban a griefer in an emergency, but you may want to remove this command.
+- `/printlog` - Displays the command log (useful to see who ran a command).
+
+## Setup
+
+This setup guide assumes you are running a Crafty instance on a local machine.
+
+### 1. 📁 Clone the repository
+
+1. Create a folder to store the discord bot.
+2. Open a terminal to this folder.
+3. Run the following:
 ```
-{
-	"discord_secrets": 
-	{
-		"token": "bot-token",
-		"clientId": "bot-clientid",
-		"guildId": "guildid",
-		"testGuildId": "optional-test-guildid",
-	},
-	"database_secrets":
-	{
-		"host": "host-address",
-		"user": "username",
-		"password": "password"
-	}
-}
-  ```
+git clone https://github.com/Alex-Bartlett/crafty-discord-bot.git
+```
 
-## Database format:
-Expects a maria-db database with the below tables. Update the connection information in database-connector.js.
-### Connections:
+4. Open the folder and rename `config.json.template` to `config.json`
+5. Open `config.json` in a text editor.
 
-**id** `int(11)`
+### 2. 🤖 Create a Discord Bot
+1. Follow Step 1 of [this guide](https://discord.com/developers/docs/quick-start/getting-started#step-1-creating-an-app) to create a Discord bot 'app' and invite it to your server.
 
-**connectionType** `varchar(50)` *either 'connect', 'disconnect', 'changed', or 'unknown'*
+2. Update `config.json` with your bot token and Application ID.
+3. Update the config with your server ID (guild ID).
 
-**clientId** `varchar(50)`
+### 3. ⚙ Configure Crafty
+1. In the Crafty dashboard, go to Settings -> Add New Role.
+2. Give the role a name like _discord_.
+3. For all servers you wish for it to control, select:
+	- Access
+	- Commands
+	- Backup
+4. Save, and return to settings.
+5. Click Add New User.
+6. Give the user a name like _discordBot_.
+7. Give it the role you created and press save.
+8. Return to settings, and click the pencil icon next to the user you created.
+9. Click on API keys at the top. On the right, give the key a name like _discord_ and select the following permissions:
+	- Commands
+	- Backup
+10. Click _Get A Token_ and paste this in `config.json` under crafty -> secrets -> token.
+11. Copy the url of your crafty instance and paste it under crafty -> secrets -> url. The url should look like `https://yourcraftyip:8443` or `https://yourcraftyurl.com:8443`. **Include the https://** and **do not include anything after the port number**.
 
-**channelId** `varchar(50)`
+### 4. ✍ Finalise the config
 
-**date** `datetime`
+For each server you wish the bot to control, do the following:
 
+1. On the crafty dashboard, select the server.
+2. At the top, below Server Details, copy the UUID. Do not include UUID: in the selection.
+3. In the `config.json`, go to crafty -> servers. Add the following:
+	```json
+	servers: [
+		{
+			name: "ServerName",
+			id: "ServerId"
+		}
+	]
+	```
+	If you have multiple, it should look this this:
+	```json
+	servers: [
+		{
+			name: "Vanilla",
+			id: "123456789"
+		},
+		{
+			name: "Modded"
+			id: "987654321"
+		}
+	]
+	```
+	Note the comma after the first closing curly bracket and none after the last.
 
-### Members
+	Do not include special characters in the server name.
 
-**id** `varchar(50)`
+### 5. ⚡ Run the Bot
+1. Install node if you do not have it installed already.
+2. Open a terminal in the bot directory and run 
+```
+npm install
+```
+3. To deploy the commands, run 
+```
+node ./deploy-commands.js
+```
+4. To run the bot, run 
+```
+node ./index.js
+```
 
-**name** `varchar(50)`
-
-
-### Channels
-
-**id** `varchar(50)`
-
-**name** `varchar(50)`
-
+_Note:  If you're hosting crafty on a linux server, you can run the bot in a screen so that it stays running in the background:_
+ 	
+```
+screen -S craftyBot node ./index.js
+```
