@@ -11,6 +11,7 @@ All commands end with the server name prefix. For this example, the name _Vanill
 - `/mc-stop-vanilla` - Stops the server.
 - `/mc-restart-vanilla` - Restarts the server.
 - `/mc-backup-vanilla` - Triggers a backup for the server.
+- `/mc-whitelist-vanilla` - Adds a player to the whitelist.
 - `/mc-ban-vanilla` - Bans a player. I added this to give players a means to ban a griefer in an emergency, but you may want to remove this command.
 - `/printlog` - Displays the command log (useful to see who ran a command).
 

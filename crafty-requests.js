@@ -139,6 +139,17 @@ async function BanPlayer(server, name) {
 	}
 }
 
+async function WhitelistPlayer(server, name) {
+	try {
+		const cmd = `whitelist add ${name}`;
+		const success = RunCommand(server, cmd);
+		return success;
+	}
+	catch (error) {
+		console.error('Error whitelisting player.', error);
+	}
+}
+
 async function GetPlayers(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/stats`
@@ -167,7 +178,8 @@ module.exports = {
 	RestartServer,
 	BackupServer,
 	BanPlayer,
-	GetPlayers
+	WhitelistPlayer,
+	GetPlayers,
 }
 
 async function RunCommand(server, cmdString) {
