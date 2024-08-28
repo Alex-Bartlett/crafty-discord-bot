@@ -1,9 +1,8 @@
-const { crafty_secrets } = require('./config.json');
+const { crafty } = require('./config.json');
 const https = require('https');
 
-const baseurl = `${crafty_secrets.url}/api/v2`;
-const token = crafty_secrets.token;
-const server = crafty_secrets.server;
+const baseurl = `${crafty.secrets.url}/api/v2`;
+const token = crafty.secrets.token;
 
 const headers = {
 	'Authorization': `Bearer ${token}`,
@@ -27,7 +26,7 @@ async function Fetch(url, options, body = null) {
 	}
 }
 
-async function StartServer() {
+async function StartServer(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/action/start_server`;
 		const options = {
@@ -42,6 +41,7 @@ async function StartServer() {
 			return true;
 		}
 		else {
+			console.error("Error starting server.", response.error, response.info);
 			return false;
 		}
 	}
@@ -50,7 +50,7 @@ async function StartServer() {
 	}
 }
 
-async function StopServer() {
+async function StopServer(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/action/stop_server`;
 		const options = {
@@ -65,6 +65,7 @@ async function StopServer() {
 			return true;
 		}
 		else {
+			console.error("Error stopping server.", response.error, response.info);
 			return false;
 		}
 	}
@@ -74,7 +75,7 @@ async function StopServer() {
 
 }
 
-async function RestartServer() {
+async function RestartServer(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/action/restart_server`;
 		const options = {
@@ -89,6 +90,7 @@ async function RestartServer() {
 			return true;
 		}
 		else {
+			console.error("Error restarting server.", response.error, response.info);
 			return false;
 		}
 	}
@@ -98,7 +100,7 @@ async function RestartServer() {
 
 }
 
-async function BackupServer() {
+async function BackupServer(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/action/backup_server`;
 		const options = {
@@ -113,6 +115,7 @@ async function BackupServer() {
 			return true;
 		}
 		else {
+			console.error("Error backing up server.", response.error, response.info);
 			return false;
 		}
 	}
@@ -122,10 +125,10 @@ async function BackupServer() {
 
 }
 
-async function BanPlayer(name) {
+async function BanPlayer(server, name) {
 	try {
 		const cmd = `ban ${name}`;
-		const success = RunCommand(cmd);
+		const success = RunCommand(server, cmd);
 		if (success) {
 			RunCommand(`say ${name} was banned from the server.`);
 		}
@@ -136,7 +139,7 @@ async function BanPlayer(name) {
 	}
 }
 
-async function GetPlayers() {
+async function GetPlayers(server) {
 	try {
 		const url = `${baseurl}/servers/${server}/stats`
 		const options = {
@@ -149,6 +152,7 @@ async function GetPlayers() {
 			return eval(response.data.players);
 		}
 		else {
+			console.error("Error getting players.", response.error, response.info);
 			return false;
 		}
 	}
@@ -166,7 +170,7 @@ module.exports = {
 	GetPlayers
 }
 
-async function RunCommand(cmdString) {
+async function RunCommand(server, cmdString) {
 	try {
 		const url = `${baseurl}/servers/${server}/stdin`
 		const options = {

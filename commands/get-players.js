@@ -1,17 +1,18 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { BanPlayer, GetPlayers } = require('../crafty-requests.js');
+const { GetPlayers } = require('../crafty-requests.js');
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('mc-players')
-		.setDescription('Gets all the players who are currently online.'),
+module.exports = (server) => ({
+	getData: () =>
+		new SlashCommandBuilder()
+			.setName('mc-players-' + server.name.toLowerCase())
+			.setDescription(`Gets all the players who are currently online for ${server.name}.`),
 	async execute(interaction) {
 		// Arguments
 
 		// Code
 		let content;
 
-		const result = await GetPlayers();
+		const result = await GetPlayers(server.id);
 
 		if (result !== false) {
 			const count = result.length;
@@ -29,4 +30,4 @@ module.exports = {
 
 		await interaction.reply({ content: content, flags: [4096], ephemeral: true });
 	},
-};
+});

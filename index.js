@@ -1,6 +1,6 @@
-const fs = require('node:fs')
-const path = require('node:path')
-const logger = require('./logger.js');
+const fs = require("node:fs");
+const path = require("node:path");
+const logger = require("./logger.js");
 // Require the necessary discord.js classes
 const {
 	Client,
@@ -9,97 +9,130 @@ const {
 	Collection,
 	ConnectionService,
 	ActivityType,
-} = require('discord.js')
-const { discord_secrets } = require('./config.json')
-const { channel } = require('node:diagnostics_channel')
+} = require("discord.js");
+const { discord_secrets, crafty } = require("./config.json");
+const { channel } = require("node:diagnostics_channel");
 
 // Create a new client instance
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMembers],
-})
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMembers,
+	],
+});
 
-client.commands = new Collection()
+client.commands = new Collection();
 
-const commandsPath = path.join(__dirname, 'commands')
+const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs
 	.readdirSync(commandsPath)
-	.filter((file) => file.endsWith('.js'))
+	.filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file)
-	const command = require(filePath)
-	// Set a new item in the Collection with the key as the command name and the value as the exported module
-	if ('data' in command && 'execute' in command) {
-		client.commands.set(command.data.name, command)
-	} else {
-		console.log(
-			`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
-		)
+	const filePath = path.join(commandsPath, file);
+	const commandFactory = require(filePath);
+
+	if (typeof commandFactory === "function") {
+		for (const server of crafty.servers) {
+			const command = commandFactory(server);
+			if ("getData" in command && "execute" in command) {
+				client.commands.set(command.getData().name, command);
+			} else {
+				console.log(
+					`[WARNING] The multi-server command at ${filePath} is missing a required "getData" or "execute" property.`
+				);
+				break;
+			}
+		}
+	}
+	else {
+		// Legacy/standard commands don't use a factory, so we will rename for readability.
+		const command = commandFactory;
+		if ("data" in command && "execute" in command) {
+			client.commands.set(command.data.name, command);
+		} else {
+			console.log(
+				`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+			);
+		}
 	}
 }
 
 // When the client is ready, run this code (only once)
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, (c) => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 	client.user.setPresence({
-		activities: [{ name: `you on your webcam`, type: ActivityType.Watching }],
-		status: 'gay',
+		activities: [
+			{ name: `you on your webcam`, type: ActivityType.Watching },
+		],
+		status: "gay",
 	});
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-	if (!interaction.isChatInputCommand()) return
+	if (!interaction.isChatInputCommand()) return;
 
-	const command = interaction.client.commands.get(interaction.commandName)
+	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`)
-		return
+		console.error(
+			`No command matching ${interaction.commandName} was found.`
+		);
+		return;
 	}
 
 	let didError = false;
 	let errMsg = "";
 
 	try {
-		await command.execute(interaction)
+		await command.execute(interaction);
 	} catch (error) {
 		didError = true;
 		errMsg = error;
-		console.error(error)
+		console.error(error);
 		try {
 			await interaction.reply({
-				content: 'There was an error while executing this command.',
+				content: "There was an error while executing this command.",
 				ephemeral: true,
-			})
+			});
+		} catch (error) {
+			console.error(
+				"Could not send error message because the interaction timed out."
+			);
 		}
-		catch (error) {
-			console.error("Could not send error message because the interaction timed out.");
-		}
-	}
-	finally {
+	} finally {
 		// Log commands (but don't log the owner checking the logs!)
-		if (!(interaction.commandName == 'printlog' && interaction.user.id == discord_secrets.ownerId)) {
-			logger.LogCommand(interaction.commandName, interaction.user.username, didError ? "but it failed!" : "");
+		if (
+			!(
+				interaction.commandName == "printlog" &&
+				interaction.user.id == discord_secrets.ownerId
+			)
+		) {
+			logger.LogCommand(
+				interaction.commandName,
+				interaction.user.username,
+				didError ? "but it failed!" : ""
+			);
 			if (didError) {
 				logger.LogError(errMsg);
 			}
 		}
 	}
-
 });
 
 // Login to Discord with your client's token
-client.login(discord_secrets.token)
+client.login(discord_secrets.token);
 
 // dbConnector.GetData()
 //     .then(result => console.log(result));
 
 process
-	.on('unhandledRejection', (reason, p) => {
-		console.error(reason, 'Unhandled Rejection at Promise', p);
+	.on("unhandledRejection", (reason, p) => {
+		console.error(reason, "Unhandled Rejection at Promise", p);
 	})
-	.on('uncaughtException', err => {
-		console.error(err, 'Uncaught Exception thrown');
+	.on("uncaughtException", (err) => {
+		console.error(err, "Uncaught Exception thrown");
 		logger.LogError(err);
 		process.exit(1);
 	});

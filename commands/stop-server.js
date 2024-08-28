@@ -1,10 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { StopServer } = require('../crafty-requests.js');
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('mc-stop')
-		.setDescription('Stops the Minecraft Server.'),
+module.exports = (server) => ({
+	getData: () =>
+		new SlashCommandBuilder()
+			.setName('mc-stop-' + server.name.toLowerCase())
+			.setDescription(`Stops the ${server.name} Minecraft Server.`),
 	async execute(interaction) {
 		// Arguments
 
@@ -13,7 +14,7 @@ module.exports = {
 		// Reply first (fetch can take > 3 sec)
 		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
 
-		const result = await StopServer();
+		const result = await StopServer(server.id);
 
 		if (result == true) {
 			content = "✅ Stopping server";
@@ -24,4 +25,4 @@ module.exports = {
 
 		await interaction.editReply(content);
 	},
-};
+});

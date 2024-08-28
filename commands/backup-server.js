@@ -1,17 +1,18 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { BackupServer } = require('../crafty-requests.js');
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('mc-backup')
-		.setDescription('Takes a backup of the Minecraft Server.'),
+module.exports = (server) => ({
+	getData: () =>
+		new SlashCommandBuilder()
+			.setName('mc-backup-' + server.name.toLowerCase())
+			.setDescription(`Takes a backup of the ${server.name} Minecraft Server.`),
 	async execute(interaction) {
 		// Arguments
 
 		// Code
 		let content;
 
-		const result = await BackupServer();
+		const result = await BackupServer(server.id);
 
 		if (result == true) {
 			content = "✅ Starting backup";
@@ -22,4 +23,4 @@ module.exports = {
 
 		await interaction.reply({ content: content, flags: [4096], ephemeral: false });
 	},
-};
+});

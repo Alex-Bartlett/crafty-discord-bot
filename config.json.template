@@ -1,0 +1,26 @@
+{
+	"discord_secrets": {
+		"token": "discordBotToken",
+		"clientId": "discordBotClientId",
+		"guildId": "serverId",
+		"testGuildId": "testServerId (optional, leave blank if not in use)",
+		"ownerId": "serverOwnerUserId"
+	},
+	"crafty": {
+		"secrets": {
+			"url": "e.g https://crafty.com:8443",
+			"token": "crafty api token"
+		},
+		"servers": [
+			{
+				"name": "server name (",
+				"id": "server id"
+			},
+			{
+				"name": "server name",
+				"id": "server id"
+			}
+		]
+	},
+	"logFolder": "./logs"
+}
