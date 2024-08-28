@@ -67,7 +67,7 @@ For each server you wish the bot to control, do the following:
 1. On the crafty dashboard, select the server.
 2. At the top, below Server Details, copy the UUID. Do not include UUID: in the selection.
 3. In the `config.json`, go to crafty -> servers. Add the following:
-	```json
+	```
 	servers: [
 		{
 			name: "ServerName",
@@ -76,7 +76,7 @@ For each server you wish the bot to control, do the following:
 	]
 	```
 	If you have multiple, it should look this this:
-	```json
+	```
 	servers: [
 		{
 			name: "Vanilla",
