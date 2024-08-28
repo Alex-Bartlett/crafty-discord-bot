@@ -1,4 +1,4 @@
-# Crafty Discord Bot
+# Crafty Discord Bot 
 
 This discord bot lets you manage your minecraft servers through discord commands via the Crafty API. It is recommended for use on small friendly servers.
 
@@ -13,6 +13,12 @@ All commands end with the server name prefix. For this example, the name _Vanill
 - `/mc-backup-vanilla` - Triggers a backup for the server.
 - `/mc-ban-vanilla` - Bans a player. I added this to give players a means to ban a griefer in an emergency, but you may want to remove this command.
 - `/printlog` - Displays the command log (useful to see who ran a command).
+
+## Feature Requests
+If you'd like to raise a feature request, please open an issue with the tag *Enhancement*. If it's something I think I can do then I'll give it a go. Alternatively, feel free to open a pull request.
+
+## Updates
+To update the bot, stop the bot and run `git pull` in the bot directory. Then follow [step 5](#5--run-the-bot) to deploy the changes.
 
 ## Setup
 
