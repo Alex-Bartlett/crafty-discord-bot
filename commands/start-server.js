@@ -52,7 +52,7 @@ module.exports = (server) => ({
 					}
 				}
 				// 3 second delay
-				await delay(3000);
+				await delay(5000);
 				maxAttempts--;
 			}
 		}		
