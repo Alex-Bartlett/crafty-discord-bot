@@ -41,12 +41,13 @@ async function StartServer(server) {
 			return true;
 		}
 		else {
-			console.error("Error starting server.", response.error, response.info);
+			console.error("Error starting server.", response?.error, response?.info);
 			return false;
 		}
 	}
 	catch (error) {
 		console.error('Error starting server.', error);
+		return false;
 	}
 }
 
