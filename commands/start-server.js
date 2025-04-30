@@ -48,11 +48,10 @@ module.exports = (server) => ({
 					}
 					catch (ex){
 						console.log("Crafty not reachable");
-						
 					}
 				}
 				// 3 second delay
-				await delay(5000);
+				await delay(3000);
 				maxAttempts--;
 			}
 		}		
