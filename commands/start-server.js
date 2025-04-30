@@ -36,7 +36,7 @@ module.exports = (server) => ({
 			var maxAttempts = 20
 			while (pingResult === false && maxAttempts > 0) {
 				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
-				await PingAsync()
+				pingResult = await PingAsync()
 				maxAttempts--;
 			}
 		}		
