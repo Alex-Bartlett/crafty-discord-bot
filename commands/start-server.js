@@ -30,13 +30,16 @@ module.exports = (server) => ({
 
 		await interaction.editReply(content);
 
-		var pingResult = await PingAsync()
-		var maxAttempts = 20
-		while (pingResult === false && maxAttempts > 0) {
-			console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
-			await PingAsync()
-			maxAttempts--;
-		}
+		if (wakeResult == true) 
+		{
+			var pingResult = await PingAsync()
+			var maxAttempts = 20
+			while (pingResult === false && maxAttempts > 0) {
+				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
+				await PingAsync()
+				maxAttempts--;
+			}
+		}		
 
 		const result = await StartServer(server.id);
 
