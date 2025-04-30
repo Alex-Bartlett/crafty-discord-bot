@@ -37,16 +37,19 @@ module.exports = (server) => ({
 		{
 			var pingResult = await PingAsync()
 			var maxAttempts = 20
-			while (pingResult === false && serverStarted == false && maxAttempts > 0) {
+			while (pingResult === false && serverStarted === false && maxAttempts > 0) {
 				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
 				if (pingResult == false) {
 					pingResult = await PingAsync();
 				}
 				else {
+					console.log("Attempting to start");
+					
 					try {
 						var serverStarted = await StartServer(server.id);
 					}
 					catch (ex){
+						console.log("Error caught");
 						continue;
 					}
 				}
