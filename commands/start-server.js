@@ -32,22 +32,31 @@ module.exports = (server) => ({
 
 		await interaction.editReply(content);
 
+		var serverStarted = false
 		if (wakeResult == true) 
 		{
 			var pingResult = await PingAsync()
 			var maxAttempts = 20
-			while (pingResult === false && maxAttempts > 0) {
+			while (pingResult === false && serverStarted == false && maxAttempts > 0) {
 				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
-				pingResult = await PingAsync();
+				if (pingResult == false) {
+					pingResult = await PingAsync();
+				}
+				else {
+					var serverStarted = await StartServer(server.id);
+				}
 				// 3 second delay
 				await delay(3000);
 				maxAttempts--;
 			}
 		}		
+		
+		// Start if server already awake
+		if (serverStarted == false) {
+			serverStarted = await StartServer(server.id);
+		}
 
-		const result = await StartServer(server.id);
-
-		if (result == true) {
+		if (serverStarted == true) {
 			content = "✅ Starting server";
 		} else {
 			content = "❌ An error occured!";
