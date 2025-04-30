@@ -50,7 +50,6 @@ module.exports = (server) => ({
 					}
 					catch (ex){
 						console.log("Error caught");
-						continue;
 					}
 				}
 				// 3 second delay
