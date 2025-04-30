@@ -36,7 +36,9 @@ module.exports = (server) => ({
 			var maxAttempts = 20
 			while (pingResult === false && maxAttempts > 0) {
 				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
-				pingResult = await PingAsync()
+				pingResult = await PingAsync();
+				// 3 second delay
+				await new Promise(r => r.setTimeout(r, 3000));
 				maxAttempts--;
 			}
 		}		
