@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { StartServer } = require("../crafty-requests.js");
-const { Wake } = require("../wake-on-lan.js");
+const { WakeAsync, PingAsync } = require("../wake-on-lan.js");
 
 module.exports = (server) => ({
 	getData: () =>
@@ -11,7 +11,6 @@ module.exports = (server) => ({
 		// Arguments
 
 		// Code
-		Wake();
 		let content = "🕓 Contacting server...";
 		// Reply first (fetch can take > 3 sec)
 		await interaction.reply({
@@ -19,6 +18,25 @@ module.exports = (server) => ({
 			flags: [4096],
 			ephemeral: false,
 		});
+
+		const wakeResult = await WakeAsync();
+		
+		if (wakeResult === null){ 
+			content = "❌ An error occured!"
+		}
+		else if (wakeResult == true) {
+			content = "⏰ Awaking server.."
+		}
+
+		await interaction.editReply(content);
+
+		var pingResult = await PingAsync()
+		var maxAttempts = 20
+		while (pingResult === false && maxAttempts > 0) {
+			console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
+			await PingAsync()
+			maxAttempts--;
+		}
 
 		const result = await StartServer(server.id);
 

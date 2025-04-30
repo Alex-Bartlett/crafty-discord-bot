@@ -19,6 +19,7 @@
 	},
 	"wakeOnLan": {
 		"enabled": false,
+		"ipAddress": "",
 		"macAddress": ""
 	},
 	"logFolder": "./logs"
