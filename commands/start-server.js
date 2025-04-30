@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require("discord.js");
 const { StartServer } = require("../crafty-requests.js");
 const { WakeAsync, PingAsync } = require("../wake-on-lan.js");
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 module.exports = (server) => ({
 	getData: () =>
 		new SlashCommandBuilder()
@@ -38,7 +40,7 @@ module.exports = (server) => ({
 				console.log(`Pinging server... (${maxAttempts} attempts remaining)`);
 				pingResult = await PingAsync();
 				// 3 second delay
-				await new Promise(r => r.setTimeout(r, 3000));
+				await delay(3000);
 				maxAttempts--;
 			}
 		}		
