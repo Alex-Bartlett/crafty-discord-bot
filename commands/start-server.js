@@ -43,14 +43,19 @@ module.exports = (server) => ({
 					pingResult = await PingAsync();
 				}
 				else {
-					var serverStarted = await StartServer(server.id);
+					try {
+						var serverStarted = await StartServer(server.id);
+					}
+					catch (ex){
+						continue;
+					}
 				}
 				// 3 second delay
 				await delay(3000);
 				maxAttempts--;
 			}
 		}		
-		
+
 		// Start if server already awake
 		if (serverStarted == false) {
 			serverStarted = await StartServer(server.id);
