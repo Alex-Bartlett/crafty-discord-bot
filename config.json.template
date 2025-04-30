@@ -17,5 +17,9 @@
 			}
 		]
 	},
+	"wakeOnLan": {
+		"enabled": false,
+		"macAddress": ""
+	},
 	"logFolder": "./logs"
 }

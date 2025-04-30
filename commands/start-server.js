@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { StartServer } = require("../crafty-requests.js");
+const { Wake } = require("../wake-on-lan.js");
 
 module.exports = (server) => ({
 	getData: () =>
@@ -10,6 +11,7 @@ module.exports = (server) => ({
 		// Arguments
 
 		// Code
+		Wake();
 		let content = "🕓 Contacting server...";
 		// Reply first (fetch can take > 3 sec)
 		await interaction.reply({
