@@ -10,8 +10,6 @@ const execAsync = promisify(exec);
 // NULL if error
 async function WakeAsync() {
     if (!wakeOnLan.enabled) {
-        console.log("WakeOnLan disabled in config.json");
-        logger.LogError("WakeOnLan disabled in config.json");
         return null;
     }
     
